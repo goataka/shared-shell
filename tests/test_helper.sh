@@ -1,7 +1,8 @@
 #!/bin/bash
-set -eu -o pipefail
 
-source "$(dirname "$0")/logger.sh"
+set -euo pipefail
+
+source "$(dirname "${BASH_SOURCE[0]}")/../logger/logger.sh"
 
 # _log_assert <level> <message>
 _log_assert() {
@@ -32,6 +33,32 @@ assert_equals() {
     _log_assert debug "[PASS] assert_equals: '${expected}' == '${actual}'"
   else
     _log_assert error "[FAIL] assert_equals: expected '${expected}', got '${actual}'"
+    return 1
+  fi
+}
+
+# assert_contains <container> <content>
+assert_contains() {
+  local -r container="${1:?container is required}"
+  local -r content="${2:?content is required}"
+
+  if [[ "${container}" == *"${content}"* ]]; then
+    _log_assert debug "[PASS] assert_contains: '${container}' contains '${content}'"
+  else
+    _log_assert error "[FAIL] assert_contains: '${container}' does not contain '${content}'"
+    return 1
+  fi
+}
+
+# assert_not_contains <container> <content>
+assert_not_contains() {
+  local -r container="${1:?container is required}"
+  local -r content="${2:?content is required}"
+
+  if [[ "${container}" != *"${content}"* ]]; then
+    _log_assert debug "[PASS] assert_not_contains: '${container}' does not contain '${content}'"
+  else
+    _log_assert error "[FAIL] assert_not_contains: '${container}' contains '${content}'"
     return 1
   fi
 }
@@ -125,18 +152,14 @@ assert_not_exists() {
   fi
 }
 
-# execute_parameterized_test <func_name> <param1,param2,...>
-execute_parameterized_test() {
+# parameterized_test <func_name> <parameter1> <parameter2> ...
+parameterized_test() {
   local -r func_name="${1:?func_name is required}"
   shift
   local parameters=("$@")
-
   for parameter in "${parameters[@]}"; do
     IFS=',' read -r -a params <<< "${parameter}"
-
-    log_info "execute_parameterized_test: ${func_name} ${params[*]}"
-
+    log_debug "parameterized_test: ${func_name} ${params[*]}"
     "${func_name}" "${params[@]}"
   done
 }
-

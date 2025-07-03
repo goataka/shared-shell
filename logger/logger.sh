@@ -1,11 +1,14 @@
 #!/bin/bash
 
+set -euo pipefail
+
+# set_log_level <LEVEL>
 set_log_level() {
     local -r level="${1}"
-    
     export LOG_LEVEL="${level}"
 }
 
+# get_log_level_priority <LEVEL>
 get_log_level_priority() {
     local -r level="${1}"
 
@@ -23,8 +26,8 @@ get_log_level_priority() {
     fi
 }
 
-# ログ関数
-log() {
+# _log <LEVEL> <message>
+_log() {
     local -r level="${1}"
     local -r message="${2}"
 
@@ -44,26 +47,26 @@ log() {
     fi
 }
 
+# log_debug <message>
 log_debug() {
     local -r message="${1}"
-
-    log "DEBUG" "${message}"
+    _log "DEBUG" "${message}"
 }
 
+# log_info <message>
 log_info() {
     local -r message="${1}"
-
-    log "INFO" "${message}"
+    _log "INFO" "${message}"
 }
 
+# log_warn <message>
 log_warn() {
     local -r message="${1}"
-
-    log "WARN" "${message}"
+    _log "WARN" "${message}"
 }
 
+# log_error <message>
 log_error() {
     local -r message="${1}"
-
-    log "ERROR" "${message}"
+    _log "ERROR" "${message}"
 }
