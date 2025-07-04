@@ -1,0 +1,19 @@
+name: Run Shell Tests
+
+on:
+  push:
+    paths:
+      - '**.sh'
+  pull_request:
+    paths:
+      - '**.sh'
+
+jobs:
+  run-shell-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Run shell tests
+        run: |
+          bash tests/run_shell_tests.sh
