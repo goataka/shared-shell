@@ -1,48 +1,34 @@
 #!/bin/bash
 set -eu -o pipefail
 
+source "$(dirname "${BASH_SOURCE[0]}")/../logger/logger.sh"
+
 find_test_scripts() {
-  local -r test_dir="${1}"
-  
-  find "${test_dir}" -type f -name 'test_*.sh'
+  local -r search_dir="${1}"
+
+  find "${search_dir}" -type f -name 'test_*.sh'
 }
 
-run_test_script() {
-  local -r test_script="${1}"
+run_test_scripts() {
+  local -r search_dir="${1}"
+  local -i all_passed=0
 
-  local -r log_file="/tmp/test_log_$$.log"
-  rm -f "${log_file}"
+  while IFS= read -r test_script; do
+    if ! bash "${test_script}"; then
+      log_debug "${test_script}: [FAIL]"
+      all_passed=1
+    fi
+  done < <(find_test_scripts "${search_dir}")
 
-  echo "Running ${test_script}..."
-
-  if ! bash "${test_script}" 2>&1 | tee "${log_file}"; then
-    echo "[ERROR] ${test_script} failed."
-    return 1
-  fi
-
-  if grep -q '\[FAIL\]' "${log_file}"; then
-    echo "[ERROR] ${test_script} reported test failure."
-    return 1
-  fi
-
-  rm -f "${log_file}"
-  echo "" 
-  return 0
+  return $all_passed
 }
 
 main() {
-  local -r script_dir="$(dirname "${BASH_SOURCE[0]}")"
-  local -r test_dir="${script_dir}"
-  local -i error_count=0
+  local search_dir="${1:-$(pwd)}"
 
-  while IFS= read -r test_script; do
-    if ! run_test_script "${test_script}"; then
-      error_count=$((error_count+1))
-    fi
-  done < <(find_test_scripts "${test_dir}")
-
-  if [ $error_count -ne 0 ]; then
-    echo "Some tests failed ($error_count)." >&2
+  if ! run_test_scripts "${search_dir}"; then
+    local -r abs_search_dir="$(cd "${search_dir}" && pwd)"
+    log_error "Tests in ${abs_search_dir}: [FAIL]"
     exit 1
   fi
 }
