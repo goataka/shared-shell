@@ -4,13 +4,13 @@ set -euo pipefail
 
 # set_log_level <LEVEL>
 set_log_level() {
-    local -r level="${1}"
+    local -r level="${1^^}"
     export LOG_LEVEL="${level}"
 }
 
 # get_log_level_priority <LEVEL>
 get_log_level_priority() {
-    local -r level="${1}"
+    local -r level="${1^^}"
 
     declare -A level_map=(
         [DEBUG]=0
@@ -26,9 +26,9 @@ get_log_level_priority() {
     fi
 }
 
-# _log <LEVEL> <message>
-_log() {
-    local -r level="${1}"
+# log <LEVEL> <message>
+log() {
+    local -r level="${1^^}"
     local -r message="${2}"
 
     local -r level_priority="$(get_log_level_priority "${level}")"
@@ -50,23 +50,23 @@ _log() {
 # log_debug <message>
 log_debug() {
     local -r message="${1}"
-    _log "DEBUG" "${message}"
+    log "DEBUG" "${message}"
 }
 
 # log_info <message>
 log_info() {
     local -r message="${1}"
-    _log "INFO" "${message}"
+    log "INFO" "${message}"
 }
 
 # log_warn <message>
 log_warn() {
     local -r message="${1}"
-    _log "WARN" "${message}"
+    log "WARN" "${message}"
 }
 
 # log_error <message>
 log_error() {
     local -r message="${1}"
-    _log "ERROR" "${message}"
+    log "ERROR" "${message}"
 }

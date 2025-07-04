@@ -4,17 +4,26 @@ set -euo pipefail
 
 source "$(dirname "${BASH_SOURCE[0]}")/../logger/logger.sh"
 
+# _get_caller_func_name: Returns the first function name in the call stack outside test_helper.sh
+_get_caller_func_name() {
+  local i
+  for ((i=1; i<${#FUNCNAME[@]}; i++)); do
+    if [[ "${BASH_SOURCE[$i]}" != "${BASH_SOURCE[0]}" ]]; then
+      printf '%s' "${FUNCNAME[$i]}"
+      return
+    fi
+  done
+  printf 'unknown'
+}
+
 # _log_assert <level> <message>
 _log_assert() {
   local -r level="${1:?level is required}"
   local -r message="${2:?message is required}"
-  
-  local -r caller_func="${FUNCNAME[2]:-main}"
-  if [ "${level}" = "debug" ]; then
-    log_debug "${caller_func}: ${message}"
-  else
-    log_error "${caller_func}: ${message}"
-  fi
+  local user_func
+  user_func="$(_get_caller_func_name)"
+
+  log "${level}" "${user_func}: ${message}"
 }
 
 # fail <message>
@@ -152,14 +161,27 @@ assert_not_exists() {
   fi
 }
 
-# parameterized_test <func_name> <parameter1> <parameter2> ...
-parameterized_test() {
+# execute_parameterized_test <func_name> <parameter1> <parameter2> ...
+execute_parameterized_test() {
   local -r func_name="${1:?func_name is required}"
   shift
   local parameters=("$@")
+
+  local all_passed="[PASS]"
+  local results=()
   for parameter in "${parameters[@]}"; do
     IFS=',' read -r -a params <<< "${parameter}"
-    log_debug "parameterized_test: ${func_name} ${params[*]}"
-    "${func_name}" "${params[@]}"
+    if "${func_name}" "${params[@]}"; then
+      results+=("case: ${params[*]} [PASS]")
+    else
+      results+=("case: ${params[*]} [FAIL]")
+      all_passed="[FAIL]"
+    fi
+  done
+
+  _log_assert info "${all_passed}"
+
+  for result in "${results[@]}"; do
+    log_info "  ${result}"
   done
 }
