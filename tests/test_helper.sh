@@ -1,5 +1,4 @@
 #!/bin/bash
-
 set -euo pipefail
 
 source "$(dirname "${BASH_SOURCE[0]}")/../logger/logger.sh"
@@ -167,7 +166,7 @@ execute_parameterized_test() {
   shift
   local parameters=("$@")
 
-  local all_passed="[PASS]"
+  local all_passed=0
   local results=()
   for parameter in "${parameters[@]}"; do
     IFS=',' read -r -a params <<< "${parameter}"
@@ -175,13 +174,53 @@ execute_parameterized_test() {
       results+=("case: ${params[*]} [PASS]")
     else
       results+=("case: ${params[*]} [FAIL]")
-      all_passed="[FAIL]"
+      all_passed=1
     fi
   done
 
-  _log_assert info "${all_passed}"
-
   for result in "${results[@]}"; do
-    log_info "  ${result}"
+    log_debug "  ${result}"
   done
+
+  return ${all_passed}
 }
+
+# run_tests <test1> <test2> ...
+run_tests() {
+  local -r tests=("$@")
+
+  local all_passed=0
+  local test_results=()
+  for test in "${tests[@]}"; do
+    if "${test}"; then
+      test_results+=("${test} [PASS]")
+    else
+      test_results+=("${test} [FAIL]")
+      all_passed=1
+    fi
+  done
+
+  local -r script_name="$(basename "$0")"
+  if [ $all_passed -eq 0 ]; then
+    log_info "${script_name} [PASS]"
+  else
+    log_error "${script_name} [FAIL]"
+  fi
+
+  for test_result in "${test_results[@]}"; do
+    if [[ "${test_result}" == *"[FAIL]"* ]]; then
+      log_error "  ${test_result}"
+    else
+      log_info "  ${test_result}"
+    fi
+  done
+
+  return $all_passed
+}
+
+
+# run_debug_tests <test1> <test2> ...
+run_debug_tests() (
+  set_log_level "DEBUG"
+  run_tests "$@"
+)

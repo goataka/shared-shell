@@ -1,5 +1,4 @@
 #!/bin/bash
-
 set -euo pipefail
 
 # set_log_level <LEVEL>
@@ -39,11 +38,13 @@ log() {
     fi
     
     local -r timestamp="$(date '+%Y-%m-%d %H:%M:%S')"
+    local -r log_text="${timestamp} [${level}] ${message}"
 
     if [ "${level}" = "ERROR" ]; then
-        echo "${timestamp} [${level}] ${message}" >&2
+        local -r ansi_escaped_red_text="\033[31m${log_text}\033[0m"
+        echo -e "${ansi_escaped_red_text}" >&2
     else
-        echo "${timestamp} [${level}] ${message}" >&1
+        echo "${log_text}" >&1
     fi
 }
 

@@ -1,5 +1,5 @@
 #!/bin/bash
-set -eu -o pipefail
+set -euo pipefail
 
 source "$(dirname "${BASH_SOURCE[0]}")/../import.sh"
 import "tests/test_helper.sh"
@@ -25,7 +25,7 @@ get_log_level_priority_test() (
 get_log_level_priority_parameterized_test() (
   local -r expected="${1}"
   local -r level="${2}"
-  assert_equals "${expected}" "$(get_log_level_priority "${level}")"
+  assert_equals "${expected}2" "$(get_log_level_priority "${level}")"
 )
 
 log_debug_test() (
@@ -45,12 +45,13 @@ log_error_test() (
 )
 
 main() {
-  set_log_level_test
-  get_log_level_priority_test
-  log_debug_test
-  log_info_test
-  log_warn_test
-  log_error_test
+  run_tests \
+    set_log_level_test \
+    get_log_level_priority_test \
+    log_debug_test \
+    log_info_test \
+    log_warn_test \
+    log_error_test
 }
 
 main "$@"
