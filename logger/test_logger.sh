@@ -25,7 +25,7 @@ get_log_level_priority_test() (
 get_log_level_priority_parameterized_test() (
   local -r expected="${1}"
   local -r level="${2}"
-  assert_equals "${expected}" "$(get_log_level_priority "${level}")"
+  assert_equals "${expected}2" "$(get_log_level_priority "${level}")"
 )
 
 log_debug_test() (
