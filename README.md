@@ -19,7 +19,7 @@
 - **テストヘルパー**（[tests/test_helper.sh](tests/test_helper.sh)）
   - アサーション（assert_equals, assert_true など）
   - パラメータ化テスト（execute_parameterized_test）
-  - テスト実行（run_tests）
+  - テスト実行（execute_tests）
 - **自動テスト検出・実行**（[tests/run_tests.sh](tests/run_tests.sh)）
   - テストファイル検索・実行
 
@@ -64,7 +64,7 @@ my_test() {
 }
 
 main() {
-  run_tests my_test
+  execute_tests my_test
 }
 
 main "$@"

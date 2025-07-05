@@ -185,8 +185,8 @@ execute_parameterized_test() {
   return ${all_passed}
 }
 
-# run_tests <test1> <test2> ...
-run_tests() {
+# execute_tests <test1> <test2> ...
+execute_tests() {
   local -r tests=("$@")
 
   local all_passed=0
@@ -218,9 +218,8 @@ run_tests() {
   return $all_passed
 }
 
-
-# run_debug_tests <test1> <test2> ...
-run_debug_tests() (
+# debug_tests <test1> <test2> ...
+debug_tests() (
   set_log_level "DEBUG"
-  run_tests "$@"
+  execute_tests "$@"
 )

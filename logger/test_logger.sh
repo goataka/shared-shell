@@ -45,7 +45,7 @@ log_error_test() (
 )
 
 main() {
-  run_tests \
+  execute_tests \
     set_log_level_test \
     get_log_level_priority_test \
     log_debug_test \
