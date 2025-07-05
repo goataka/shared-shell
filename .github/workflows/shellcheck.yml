@@ -6,7 +6,7 @@ on:
       - '**/*.sh'
 
 concurrency:
-  group: shellcheck-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -16,8 +16,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        
       - name: Run ShellCheck
         uses: reviewdog/action-shellcheck@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           level: warning
+          reporter: github-pr-check
+          fail_on_error: true
