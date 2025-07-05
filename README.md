@@ -39,7 +39,7 @@ ref. [git submodules](https://git-scm.com/book/ja/v2/Git-のさまざまなツ�
 #!/bin/bash
 set -euo pipefail
 
-source "$(dirname "$0")/.submodules/shared-shell/core.sh" 
+source "<REPO_ROOT>/.submodules/shared-shell/core.sh"
 import "logger/logger.sh"
 
 func() {
@@ -56,7 +56,7 @@ func() {
 #!/bin/bash
 set -euo pipefail
 
-source "$(dirname "$0")/.submodules/shared-shell/core.sh" 
+source "<REPO_ROOT>/.submodules/shared-shell/core.sh" 
 import "tests/test_helper.sh"
 
 my_test() {
@@ -76,7 +76,7 @@ main "$@"
 #!/bin/bash
 set -euo pipefail
 
-source "$(dirname "$0")/.submodules/shared-shell/core.sh" 
+source "<REPO_ROOT>/.submodules/shared-shell/core.sh" 
 
 main() {
   run tests/run_tests.sh 
