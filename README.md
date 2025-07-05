@@ -20,7 +20,7 @@
   - アサーション（assert_equals, assert_true など）
   - パラメータ化テスト（execute_parameterized_test）
   - テスト実行（run_tests）
-- **自動テスト検出・実行**（[tests/run_shell_tests.sh](tests/run_shell_tests.sh)）
+- **自動テスト検出・実行**（[tests/run_tests.sh](tests/run_tests.sh)）
   - テストファイル検索・実行
 
 ## 使い方
@@ -79,7 +79,7 @@ set -euo pipefail
 source "$(dirname "$0")/.submodules/shared-shell/core.sh" 
 
 main() {
-  run tests/run_shell_tests.sh 
+  run tests/run_tests.sh 
 }
 
 main "$@"
