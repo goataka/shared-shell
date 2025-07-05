@@ -4,6 +4,11 @@ Bash用シェルスクリプト・ライブラリ
 
 ## 概要
 
+### コーディング・ガイド
+
+- 書き方ガイド[.github/sh.instructions.md](.github/sh.instructions.md)）
+  - 関数、引数、変数など
+
 ### ライブラリ
 
 - **インポート**（[import.sh](import.sh)）
@@ -12,17 +17,11 @@ Bash用シェルスクリプト・ライブラリ
   - ログレベル指定制御（DEBUG/INFO/WARN/ERROR）
   - ログ出力関数（log_debug, log_info, log_warn, log_error）
 - **テストヘルパー**（[tests/test_helper.sh](tests/test_helper.sh)）
-  - 標準アサーション（assert_equals, assert_true など）
+  - アサーション（assert_equals, assert_true など）
   - パラメータ化テスト（execute_parameterized_test）
-  - テスト実行関数（run_tests）
+  - テスト実行（run_tests）
 - **自動テスト検出・実行**（[tests/run_shell_tests.sh](tests/run_shell_tests.sh)）
-  - 指定フォルダ下の`test_*.sh`を自動実行
-
-### Copilot Instruction
-
-- Shell用指示[.github/sh.instructions.md](.github/sh.instructions.md)）
-  - 書き方ガイド
-  - コーディング規約
+  - テストファイル検索・実行
 
 ## 使い方
 
@@ -45,8 +44,9 @@ func() {
 
 ```bash
 #!/bin/bash
-source "$(dirname "$0")/../import.sh"
+set -euo pipefail
 
+source "$(dirname "$0")/../import.sh"
 import "tests/test_helper.sh"
 
 my_test() {
@@ -56,13 +56,14 @@ my_test() {
 main() {
   run_tests my_test
 }
+
 main "$@"
 ```
 
 ### 全テスト実行
 
 ```bash
-bash tests/run_shell_tests.sh [search_dir] [--debug]
+bash tests/run_shell_tests.sh [search_dir]
 ```
 
 - `search_dir`（省略可）: テストスクリプトを探すディレクトリ（デフォルト:カレント）
