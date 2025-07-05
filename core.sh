@@ -3,6 +3,7 @@ set -euo pipefail
 
 source "$(dirname "${BASH_SOURCE[0]}")/logger/logger.sh"
 
+# _get_script_path <relative_script_path>
 _get_script_path() {
   local -r relative_script_path="${1}"
 
@@ -25,6 +26,7 @@ import() {
   source "${script_path}"
 }
 
+# run <relative_script_path> [args...]
 run() {
   local -r relative_script_path="${1:?relative_script_path is required}"
   shift
