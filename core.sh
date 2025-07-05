@@ -20,7 +20,7 @@ _get_script_path() {
 import() {
   local -r relative_script_path="${1:?relative_script_path is required}"
 
-  local -r script_path="$(get_script_path "${relative_script_path}")"
+  local -r script_path="$(_get_script_path "${relative_script_path}")"
 
   source "${script_path}"
 }
@@ -29,7 +29,7 @@ run() {
   local -r relative_script_path="${1:?relative_script_path is required}"
   shift
 
-  local -r script_path="$(get_script_path "${relative_script_path}")"
+  local -r script_path="$(_get_script_path "${relative_script_path}")"
 
   bash "${script_path}" "$@"
 }
