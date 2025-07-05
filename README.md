@@ -1,6 +1,6 @@
 # shared-shell
 
-Bash用シェルスクリプト・ライブラリ
+シェルスクリプト・ライブラリ
 
 ## 概要
 
@@ -25,10 +25,22 @@ Bash用シェルスクリプト・ライブラリ
 
 ## 使い方
 
+### セットアップ
+
+```bash
+git submodule add https://github.com/goataka/shared-shell.git .submodules/shared-shell
+```
+
+ref. [git submodules](https://git-scm.com/book/ja/v2/Git-のさまざまなツール-サブモジュール)
+
 ### ログ出力
 
 ```bash
-source logger/logger.sh
+#!/bin/bash
+set -euo pipefail
+
+source "$(dirname "$0")/.submodules/shared-shell/import.sh" 
+import "logger/logger.sh"
 
 func() {
   log_debug "デバッグメッセージ"
@@ -38,15 +50,13 @@ func() {
 }
 ```
 
-### テスト作成
-
-`tests/`に`test_*.sh`を作成:
+### ユニットテスト
 
 ```bash
 #!/bin/bash
 set -euo pipefail
 
-source "$(dirname "$0")/../import.sh"
+source "$(dirname "$0")/.submodules/shared-shell/import.sh" 
 import "tests/test_helper.sh"
 
 my_test() {
@@ -63,8 +73,14 @@ main "$@"
 ### 全テスト実行
 
 ```bash
-bash tests/run_shell_tests.sh [search_dir]
+#!/bin/bash
+set -euo pipefail
+
+source "$(dirname "$0")/.submodules/shared-shell/import.sh" 
+
+main() {
+  run tests/run_shell_tests.sh 
+}
+
+main "$@"
 ```
-
-- `search_dir`（省略可）: テストスクリプトを探すディレクトリ（デフォルト:カレント）
-
