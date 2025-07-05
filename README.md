@@ -11,8 +11,8 @@
 
 ### ライブラリ
 
-- **インポート**（[import.sh](import.sh)）
-  - 相対ライブラリ読み込み
+- **コア**（[core.sh](core.sh)）
+  - ライブラリ利用(import, run)
 - **ロガー**（[logger/logger.sh](logger/logger.sh)）
   - ログレベル指定制御（DEBUG/INFO/WARN/ERROR）
   - ログ出力関数（log_debug, log_info, log_warn, log_error）
@@ -39,7 +39,7 @@ ref. [git submodules](https://git-scm.com/book/ja/v2/Git-のさまざまなツ�
 #!/bin/bash
 set -euo pipefail
 
-source "$(dirname "$0")/.submodules/shared-shell/import.sh" 
+source "$(dirname "$0")/.submodules/shared-shell/core.sh" 
 import "logger/logger.sh"
 
 func() {
@@ -56,7 +56,7 @@ func() {
 #!/bin/bash
 set -euo pipefail
 
-source "$(dirname "$0")/.submodules/shared-shell/import.sh" 
+source "$(dirname "$0")/.submodules/shared-shell/core.sh" 
 import "tests/test_helper.sh"
 
 my_test() {
@@ -76,7 +76,7 @@ main "$@"
 #!/bin/bash
 set -euo pipefail
 
-source "$(dirname "$0")/.submodules/shared-shell/import.sh" 
+source "$(dirname "$0")/.submodules/shared-shell/core.sh" 
 
 main() {
   run tests/run_shell_tests.sh 

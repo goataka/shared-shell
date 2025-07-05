@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-source "$(dirname "${BASH_SOURCE[0]}")/../import.sh"
+source "$(dirname "${BASH_SOURCE[0]}")/../core.sh"
 import "tests/test_helper.sh"
 import "logger/logger.sh"
 
