@@ -1,15 +1,16 @@
 ---
-applyTo: ".sh"
+applyTo: "**/*.sh"
 ---
-# Shell Script Copilot Instruction
+# Copilot Instruction for Shell Script
+
+## 基本
 
 - shbangは`bash`とする。
-- 実行オプションの基本は`-eu -o pipefail`とする。
+- 実行オプションの基本は`-euo pipefail`とする。
 
 ## 関数
 
 - 原則として関数内に処理を記述する。
-- 関数の役割は１つになるようにする。
 - エントリ関数はmainを利用する。
 - mainでは必須の引数を`:?`で指定する。
 - main関数の記述は最下部とする。
@@ -32,6 +33,5 @@ applyTo: ".sh"
 ## その他
 
 - コマンドのオプションはロングオプションを利用する。
-- 使われない変数は定義しない。
 - ライブラリの場合
   - main関数は定義しない。
