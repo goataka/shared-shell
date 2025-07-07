@@ -4,10 +4,11 @@
 
 ## 概要
 
-### コーディング・ガイド
+### コーディング規約
 
-- 書き方ガイド[sh.instructions.md](.github/instructions/sh.instructions.md)）
-  - 関数、引数、変数など
+- コーディング（[coding.instructions.md](.github/instructions/coding.instructions.md)）
+- シェル・スクリプト（[sh.instructions.md](.github/instructions/sh.instructions.md)）
+  - テスト（[test.instructions.md](.github/instructions/test.instructions.md)）
 
 ### ライブラリ
 
