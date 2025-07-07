@@ -35,3 +35,7 @@ applyTo: "**/*.sh"
 - コマンドのオプションはロングオプションを利用する。
 - ライブラリの場合
   - main関数は定義しない。
+
+## テスト
+
+- [test.instructions.md](.github/instructions/test.instructions.md)を参照する。
