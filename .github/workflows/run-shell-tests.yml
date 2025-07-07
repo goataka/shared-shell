@@ -1,0 +1,22 @@
+name: Shell Tests
+
+on:
+  pull_request:
+    paths:
+      - '**/*.sh'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  shell-tests:
+    name: Shell Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run shell tests
+        run: |
+          bash tests/run_tests.sh
